@@ -1,4 +1,3 @@
-
 let ProvisionWiFi = {
     onBoot: {
         enable: ffi('bool mgos_provision_wifi_enable_boot_test(void)'),
@@ -10,12 +9,15 @@ let ProvisionWiFi = {
         copy: ffi('bool mgos_provision_wifi_copy_sta_values(void)'),
         clear: ffi('bool mgos_provision_wifi_clear_sta_values(void)'),
     },
-    LastTest: {
+    Results: {
         success: ffi('bool mgos_provision_wifi_get_last_test_results(void)'),
-        ssid: ffi('char *mgos_provision_wifi_get_last_test_ssid(void)')
+        ssid: ffi('char *mgos_provision_wifi_get_last_test_ssid(void)'),
+        // check: ffi(''), // TODO: allow passing SSID to check if last test was for SSID and return results
     },
     isRunning: ffi( 'bool mgos_provision_wifi_is_test_running(void)'),
-    runTest: ffi('void mgos_provision_wifi_run_test(void)'),
-    test: ffi('void mgos_provision_wifi_test(void(*)(userdata),userdata)'),
-    testSSIDandPass: ffi('void mgos_provision_wifi_test_ssid_pass(char*,char*,void(*)(userdata),userdata)')
+    Test: {
+        run: ffi('void mgos_provision_wifi_test(void(*)(int,char*,userdata),userdata)'),
+        SSIDandPass: ffi('void mgos_provision_wifi_test_ssid_pass(char*,char*,void(*)(int,char*,userdata),userdata)')
+    },
+    run: ffi('void mgos_provision_wifi_run_test(void)')
 };
