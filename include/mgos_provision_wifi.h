@@ -127,7 +127,7 @@ bool mgos_provision_wifi_is_test_running(void);
 /*
  * Return last station test SSID; the caller should free it.
  */
-char *mgos_provision_wifi_get_last_test_ssid(void);
+const char *mgos_provision_wifi_get_last_test_ssid(void);
 
 #ifdef __cplusplus
 }

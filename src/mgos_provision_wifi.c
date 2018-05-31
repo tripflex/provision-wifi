@@ -16,6 +16,7 @@
  */
 
 #include "mgos_provision_wifi.h"
+#include "mgos_provision_wifi_hal.h"
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -67,7 +68,7 @@ static void mgos_provision_wifi_set_last_test(bool last_test_results){
   // mgos_event_trigger(MGOS_EVENT_PROVISION_WIFI_TEST_COMPLETE, &test_results); 
 
   if( s_provision_wifi_test_cb != NULL ){
-    s_provision_wifi_test_cb( last_test_result, mgos_sys_config_get_provision_wifi_sta_ssid(), s_provision_wifi_test_cb_userdata );
+    s_provision_wifi_test_cb( last_test_results, mgos_sys_config_get_provision_wifi_sta_ssid(), s_provision_wifi_test_cb_userdata );
   }
 
   char *err = NULL;
@@ -392,9 +393,14 @@ bool mgos_provision_wifi_get_last_test_results(void){
   return mgos_sys_config_get_provision_wifi_results_success();
 }
 
+// char *mgos_provision_wifi_get_last_test_ssid(void){
+//   const char *ssid = NULL;
+//   ssid = mgos_sys_config_get_provision_wifi_results_ssid();
+//   return (ssid != NULL ? strdup(ssid) : NULL);
+// }
+
 const char *mgos_provision_wifi_get_last_test_ssid(void){
-  const char *ssid = NULL;
-  return (ssid != NULL ? strdup(ssid) : NULL);
+  return mgos_sys_config_get_provision_wifi_results_ssid();
 }
 
 bool mgos_provision_wifi_disconnect_connected_sta(void){
