@@ -25,9 +25,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/* Timer callback */
-typedef void (*provision_wifi_callback)(void *param);
-
 /*
  * Provision WiFi Callback Results
  */
