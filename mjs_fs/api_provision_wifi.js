@@ -15,7 +15,7 @@ let ProvisionWiFi = {
         ssid: ffi('char *mgos_provision_wifi_get_last_test_ssid(void)')
     },
     isRunning: ffi( 'bool mgos_provision_wifi_is_test_running(void)'),
-    test: ffi('void mgos_provision_wifi_run_test(void)'),
+    runTest: ffi('void mgos_provision_wifi_run_test(void)'),
     // ## **`Timer.set(milliseconds, flags, handler, userdata)`**
     // Setup timer with `milliseconds` timeout and `handler` as a callback.
     // `flags` can be either 0 or `Timer.REPEAT`. In the latter case, the call
@@ -32,5 +32,5 @@ let ProvisionWiFi = {
     //   print(value ? 'Tick' : 'Tock');
     // }, null);
     // ```
-    runTest: ffi('int mgos_set_timer(int,int,void(*)(userdata),userdata)'),
+    test: ffi('void mgos_provision_wifi_test(int,int,void(*)(userdata),userdata)'),
 };

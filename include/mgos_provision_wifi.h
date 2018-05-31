@@ -26,21 +26,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 /*
- * Provision WiFi Callback Results
- */
-struct mgos_provision_wifi_result {
-  char ssid[33];
-  bool success;
-};
-
-/*
- * Callback prototype for `mgos_wifi_scan()`, called when wifi scan is done.
- * `num_res` is a number of networks found, `res` is a pointer to the first
- * one. `arg` is an arbitrary pointer given to `mgos_wifi_scan()`.
+ * Callback prototype for `mgos_provision_wifi_test()`, called when wifi test is done.
+ * `arg` is an arbitrary pointer given to `mgos_provision_wifi_test()`.
  *
- * See `mgos_wifi_scan()` for more details.
+ * See `mgos_provision_wifi_test()` for more details.
  */
-typedef void (*mgos_wifi_provision_cb_t)(struct mgos_provision_wifi_result *res, void *arg);
+typedef void (*mgos_wifi_provision_cb_t)(bool last_test_success, const char *ssid, void *userdata);
 
 /*
  * Connect to the previously setup wifi station (with `mgos_wifi_setup_sta()`).
@@ -54,6 +45,26 @@ bool mgos_provision_wifi_disconnect_sta(void);
 
 /*
  * Setup station configuration (must be ran before mgos_priovision_wifi_connect())
+ *
+ * struct is same as mgos_config_wifi_sta
+ *
+ * ```c
+ * struct mgos_config_provision_wifi_sta {
+ *   int enable; // MUST BE SET TO TRUE
+ *   char *ssid;
+ *   char *pass;
+ *   char *user;
+ *   char *anon_identity;
+ *   char *cert;
+ *   char *key;
+ *   char *ca_cert;
+ *   char *ip;
+ *   char *netmask;
+ *   char *gw;
+ *   char *nameserver;
+ *   char *dhcp_hostname;
+ * };
+ * ```
  */
 bool mgos_provision_wifi_setup_sta(const struct mgos_config_provision_wifi_sta *cfg);
 
@@ -72,7 +83,16 @@ void mgos_provision_wifi_run_test(void);
  *
  * A note for implementations: invoking inline is ok.
  */
-void mgos_provision_wifi_test(mgos_wifi_provision_cb_t cb, void *arg);
+void mgos_provision_wifi_test(mgos_wifi_provision_cb_t cb, void *userdata);
+
+/*
+ * TODO:
+ * 
+ * Same as mgos_provision_wifi_test() except this function you must pass the
+ * SSID and Password to test with
+ * 
+ */
+void mgos_provision_wifi_test_ssid_pass(const char *ssid, const char *pass, mgos_wifi_provision_cb_t cb, void *userdata);
 
 /*
  * Copy test WiFi Provision values to wifi.sta

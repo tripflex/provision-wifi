@@ -34,10 +34,8 @@
 
 #include "mongoose.h"
 
-struct cb_info {
-  void *cb;
-  void *arg;
-};
+static mgos_wifi_provision_cb_t s_provision_wifi_test_cb = NULL;
+static void *s_provision_wifi_test_cb_userdata = NULL;
 
 static mgos_timer_id s_provision_wifi_timer_id = MGOS_INVALID_TIMER_ID;
 
@@ -64,6 +62,13 @@ static void mgos_provision_wifi_set_last_test(bool last_test_results){
   LOG(LL_INFO, ("Provision WiFi setting last test results to %d", last_test_results));
   mgos_sys_config_set_provision_wifi_results_success(last_test_results); // Set results
   mgos_sys_config_set_provision_wifi_results_ssid( mgos_sys_config_get_provision_wifi_sta_ssid() ); // Set SSID
+
+  // TODO: add event triggers
+  // mgos_event_trigger(MGOS_EVENT_PROVISION_WIFI_TEST_COMPLETE, &test_results); 
+
+  if( s_provision_wifi_test_cb != NULL ){
+    s_provision_wifi_test_cb( last_test_result, mgos_sys_config_get_provision_wifi_sta_ssid(), s_provision_wifi_test_cb_userdata );
+  }
 
   char *err = NULL;
   if( ! save_cfg(&mgos_sys_config, &err) ){
@@ -477,20 +482,25 @@ void mgos_provision_wifi_run_test(void){
 
 }
 
-void mgos_provision_wifi_test(mgos_wifi_provision_cb_t cb, void *arg) {
-  struct cb_info *cbi = (struct cb_info *) calloc(1, sizeof(*cbi));
-  if (cbi == NULL) return;
-  cbi->cb = cb;
-  cbi->arg = arg;
+void mgos_provision_wifi_test(mgos_wifi_provision_cb_t cb, void *userdata) {
+  s_provision_wifi_test_cb = cb;
+  s_provision_wifi_test_cb_userdata = userdata;
 
-  wifi_lock();
-  
-  // SLIST_INSERT_HEAD(&s_scan_cbs, cbi, next);
   if (!b_provision_wifi_testing) {
+    LOG(LL_INFO, ("%s", "Provision WiFi Running Test with Callback Set" ) );
     mgos_provision_wifi_run_test();
   }
+}
 
-  wifi_unlock();
+void mgos_provision_wifi_test_ssid_pass(const char *ssid, const char *pass, mgos_wifi_provision_cb_t cb, void *userdata){
+  if( ! ssid ){
+    LOG(LL_ERROR, ("%s", "Provision WiFi Test SSID PASS, SSID is missing" ) );
+    return;
+  }
+
+  //TODO: set ssid and password in config
+  LOG(LL_INFO, ("%s", "Provision WiFi Running Test with Callback after setting SSID and PASS" ) );
+  mgos_provision_wifi_test( cb, userdata );
 }
 
 bool mgos_provision_wifi_init(void) {
