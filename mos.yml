@@ -1,0 +1,76 @@
+author: Myles McNamara <myles@smyl.es>
+type: lib
+description: WiFi Provisioning library to check/test WiFi credentials, and save them to STA configuration
+version: 1.0
+# platforms: [ cc3200, cc3220, esp32, esp8266 ]
+
+sources:
+  - src
+includes:
+  - include
+
+config_schema:
+  - [ "provision", "o", {title: "Device provisioning object"}]
+  - [ "provision.wifi", "o", {title: "Device WiFi provisioning configuration"}]
+  
+  # This lib will consider a connection attempt as FAILED when either the value of attempts is reached, or the timeout period is reached ... whichever comes first.
+  - [ "provision.wifi.attempts", "i", 15, {title: "Number of failed attempts to connect to WiFi before considering connection failed."} ] # Attempts is based on the number of times that the event for CONNECTING is triggered
+  - [ "provision.wifi.timeout", "i", 30, {title: "Timeout for connection, in seconds."} ]  # Timeout is defined period of time, in seconds, before considering the connection failed
+  - [ "provision.wifi.reconnect", "b", true, {titie: "If existing STA is connected when test is initiated, and that test fails, reconnect to existing STA wifi configuration."} ]
+  
+  - ["provision.wifi.boot", "o", {title: "WiFi Provision Boot Settings"}]
+  - ["provision.wifi.boot.enable", "b", false, {titie: "Enable provision WiFi connection test on device boot"} ]
+  - ["provision.wifi.boot.delay", "i", 10, {titie: "Delay in seconds before attempting test on boot for existing STA to connect only when wifi.sta.enable is true, set to 0 to disable (not recommended)"} ]
+
+  # WiFi STA Test Configuration
+  - ["provision.wifi.sta", "o", {title: "WiFi Provision Test Station"}]
+  - ["provision.wifi.sta.enable", "b", true, {title: "Connect to existing WiFi"}] # This MUST always be set to TRUE otherwise call to core wifi lib to validate STA config will fail
+  - ["provision.wifi.sta.ssid", "s", {title: "SSID"}]
+  - ["provision.wifi.sta.pass", "s", {title: "Password", type: "password"}]
+  - ["provision.wifi.sta.user", "s", {title: "Username for WPA-PEAP mode"}]
+  - ["provision.wifi.sta.anon_identity", "s", {title: "Anonymous identity for WPA mode"}]
+  - ["provision.wifi.sta.cert", "s", {title: "Client certificate for WPA-TTLS mode"}]
+  - ["provision.wifi.sta.key", "s", {title: "Client key for WPA-TTLS mode"}]
+  - ["provision.wifi.sta.ca_cert", "s", {title: "CA certificate for WPA-enterprise mode"}]
+  - ["provision.wifi.sta.ip", "s", {title: "Static IP Address"}]
+  - ["provision.wifi.sta.netmask", "s", {title: "Static Netmask"}]
+  - ["provision.wifi.sta.gw", "s", {title: "Static Default Gateway"}]
+  - ["provision.wifi.sta.nameserver", "s", {title: "DNS Server"}]
+  - ["provision.wifi.sta.dhcp_hostname", "s", {title: "Host name to include in DHCP requests"}]
+
+  # WiFi STA Test Results (DO NOT MODIFY THESE VALUES -- INTERNAL USE ONLY)
+  - ["provision.wifi.results", "o", {title: "WiFi Provision Test Results"}]
+  - ["provision.wifi.results.success", "b", false, {title: "Whether or not the last test was succesful or not"}] # You should NEVER override this value
+  - ["provision.wifi.results.ssid", "s", "", {title: "SSID used for last test results"}] # You should NEVER override this value
+
+  # Success
+  - [ "provision.wifi.success", "o", {title: "Successful WiFi connection settings"} ]
+  - [ "provision.wifi.success.clear", "b", false, {title: "Clear test STA configurations after a succesful connection"} ]
+  - [ "provision.wifi.success.copy", "b", true, {title: "Save WiFi STA configuration to device after successful connection"} ]
+  - [ "provision.wifi.success.enable", "b", true, {title: "Enable WiFi STA after copying values (only if copy is enabled)"} ]
+  - [ "provision.wifi.success.reboot", "b", false, {title: "Reboot device after successful WiFi connection attempt, and copying sta values to wifi statation (if enabled)" } ]
+  - [ "provision.wifi.success.disconnect", "b", false, {title: "Disconnect from STA after succesful connection attempt." } ]
+  # TODO:
+  # - [ "provision.wifi.success.index", "i", 0, {title: "STA index to copy values to.  Default is 0 which is the first STA in configuration, only change this if you know what you are doing."} ]
+
+  # Fail
+  - [ "provision.wifi.fail", "o", {title: "Failed WiFi connection settings"} ]
+  - [ "provision.wifi.fail.clear", "b", false, {title: "Clear set STA configurations after a failed connection attempt (default false)"} ]
+  - [ "provision.wifi.fail.reboot", "b", false, {title: "Reboot device after failed WiFi connection attempt (default false)"} ]
+
+libs:
+  - origin: https://github.com/mongoose-os-libs/wifi
+
+tags:
+  - c
+  - wifi
+  - setup
+  - js
+
+cdefs:
+  MGOS_ENABLE_WIFI_SETUP_CHECK: 0
+
+init_after:
+  - wifi
+
+manifest_version: 2017-09-29
