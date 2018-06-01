@@ -463,9 +463,8 @@ void mgos_provision_wifi_run_test(void){
 
   const struct mgos_config_provision_wifi_sta *cfg = mgos_sys_config_get_provision_wifi_sta();
   
-  // Disconnect before attempting any new connections
-  // mgos_wifi_disconnect();
   mgos_provision_wifi_disconnect_connected_sta();
+  // mgos_provision_wifi_setup_sta() calls wifi disconnect before dev setup
   result = mgos_provision_wifi_setup_sta( cfg );
   
   // cfg->enable = false; // Set to false to FORCE wifi lib not to set/create timer (since we use our own)

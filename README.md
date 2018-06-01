@@ -12,15 +12,20 @@
         - [Examples](#examples)
     - [C](#c)
     - [WiFi AP Need to Know](#wifi-ap-need-to-know)
+    - [Roadmap](#roadmap)
+    - [Suggestions and Code Review](#suggestions-and-code-review)
     - [License](#license)
 
 
 ## Author
-Myles McNamara
+- Myles McNamara
+- [You!](#suggestions-and-code-review)
 
 ## Overview
 
 This library is meant to help with provisioning (setting up) a device with WiFi Credentials, handling timeouts, max connection attempts, and letting you know whether or not the SSID/Password are correct.
+
+[Are you familiar with Mongoose OS and/or C programming?](#suggestions-and-code-review)
 
 ## Why?
 I created this library because the default/core Mongoose OS WiFi library, which this library does depend on, does not do that good of a job when it comes to validating WiFi values that are set.  If correct SSID and Password are set, it works great ... but as we all know with IoT devices, the end user will be the one setting it up, and chances are there will be multiple instances where the type the SSID or Password incorrectly, and there's no real easy way of dealing with that.  
@@ -54,19 +59,54 @@ load('api_provision_wifi.js');
 
 You will then have access to the `ProvisionWiFi` javascript object, with the following:
 
-`ProvisionWiFi.run();` - Run WiFi test based on values previously set in `provision.wifi.sta` (no callback)
-`ProvisionWiFi.Test.run( callback_fn, userdata );` - Run WiFi test based on values previously set in `provision.wifi.sta`, calling `callback_fn` after completion
-`ProvisionWiFi.Test.SSIDandPass( ssid, pass, callback_fn, userdata );` - Set `provision.wifi.sta.ssid` and `provision.wifi.sta.pass`, calling `callback_fn` after completion
+```js
+ProvisionWiFi.run();
+``` 
+- Run WiFi test based on values previously set in `provision.wifi.sta` (no callback)
 
-`ProvisionWiFi.onBoot.enable();` - Enable testing on device boot
-`ProvisionWiFi.onBoot.disable();` - Disable testing on device boot
-`ProvisionWiFi.STA.copy();` - Copy test station values to `wifi.sta`
-`ProvisionWiFi.STA.clear();` - Clear any existing station values in `provision.wifi.sta`
+```js
+ProvisionWiFi.Test.run( callback_fn, userdata );
+```
+- Run WiFi test based on values previously set in `provision.wifi.sta`, calling `callback_fn` after completion
+```js
+ProvisionWiFi.Test.SSIDandPass( ssid, pass, callback_fn, userdata );
+```
+- Set `provision.wifi.sta.ssid` and `provision.wifi.sta.pass`, calling `callback_fn` after completion
 
-`ProvisionWiFi.Results.success();` - Returns whether or not last test was a success
-`ProvisionWiFi.Results.ssid();` - Returns last SSID that was tested
+```js
+ProvisionWiFi.onBoot.enable();
+```
+- Enable testing on device boot
 
-`ProvisionWiFi.Results.isRunning();` - Returns whether or not test is currently running
+```js
+ProvisionWiFi.onBoot.disable();
+```
+- Disable testing on device boot
+
+```js
+ProvisionWiFi.STA.copy();
+```
+- Copy test station values to `wifi.sta`
+
+```js
+ProvisionWiFi.STA.clear();
+```
+- Clear any existing station values in `provision.wifi.sta`
+
+```js
+ProvisionWiFi.Results.success();
+```
+- Returns whether or not last test was a success
+
+```js
+ProvisionWiFi.Results.ssid();
+```
+- Returns last SSID that was tested
+
+```js
+ProvisionWiFi.Results.isRunning();
+```
+- Returns whether or not test is currently running
 
 **Callback Parameters**
 If you use a callback function (`ProvisionWiFi.Test.run` or `ProvisionWiFi.Test.SSIDandPass`) the callback function will be passed 3 arguments: `success, ssid, userdata`
@@ -119,6 +159,18 @@ if( lastTestSSID == 'TestSSID' && lastTestSuccess ){
 ## WiFi AP Need to Know
 - The AP should *NOT* go down while testing
 - If `provision.wifi.reconnect` is `true` (default), there was an existing STA that was connected to before testing, and the test failed, the AP will go down for ~5 seconds or so while wifi is reinitialized.
+
+## Roadmap
+- RPC Helper library (for making RPC calls to provision wifi)
+- [Your idea!](https://github.com/tripflex/mos-lib-provision-wifi/issues/new)
+- Optimizing and reducing code base size
+
+## Suggestions and Code Review
+ **PLEASE PLEASE** if you're familiar with Mongoose OS (mos) or C programming in general, I need your help with this project!  
+ 
+ My C and Mongoose OS experience is pretty limited (mos only month or two), but being a full time geek and developer I was able to figure out how to get this working (for most part) ... but i'm sure there's numerous ways to optimize the code base, or correct/better way to do things either in C or Mongoose OS specifically, and **i'm completely open to constructive criticism!**
+
+ Even if you're not 100% sure, neither am I, so open up an issue and let's discuss it!
 
 ## License
 Apache 2.0
