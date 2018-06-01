@@ -48,16 +48,16 @@ _**This library is my solution to this problem**_, not only solving it, but also
 ## Install/Use
 To use this library in your Mongoose OS project, just add it under the `libs` in your `mos.yml` file:
 ```yml
-  - origin: https://github.com/tripflex/mos-lib-provision-wifi
+  - origin: https://github.com/tripflex/provision-wifi
 ```
 
 ## Configurations
 This library adds a `provision.wifi` object to the mos configuration, with the following settings:
 
-**To see all of the available configurations** please look at the [mos.yml](https://github.com/tripflex/mos-lib-provision-wifi/blob/master/mos.yml#L12) file.  There are descriptions for each one of the settings.
+**To see all of the available configurations** please look at the [mos.yml](https://github.com/tripflex/provision-wifi/blob/master/mos.yml#L12) file.  There are descriptions for each one of the settings.
 
 ## MJS
-[api_provision_wifi.js](https://github.com/tripflex/mos-lib-provision-wifi/blob/master/mjs_fs/api_provision_wifi.js)
+[api_provision_wifi.js](https://github.com/tripflex/provision-wifi/blob/master/mjs_fs/api_provision_wifi.js)
 
 To use this library in your JavaScript files, make sure to load it at top of the file:
 ```js
@@ -160,7 +160,7 @@ if( lastTestSSID == 'TestSSID' && lastTestSuccess ){
 ```
 
 ## C
-[mgos_provision_wifi.h](https://github.com/tripflex/mos-lib-provision-wifi/blob/master/include/mgos_provision_wifi.h)
+[mgos_provision_wifi.h](https://github.com/tripflex/provision-wifi/blob/master/include/mgos_provision_wifi.h)
 
 
 ## WiFi AP Need to Know
@@ -169,7 +169,7 @@ if( lastTestSSID == 'TestSSID' && lastTestSuccess ){
 
 ## Roadmap
 - RPC Helper library (for making RPC calls to provision wifi)
-- [Your idea!](https://github.com/tripflex/mos-lib-provision-wifi/issues/new)
+- [Your idea!](https://github.com/tripflex/provision-wifi/issues/new)
 - Optimizing and reducing code base size
 
 ## Suggestions and Code Review
