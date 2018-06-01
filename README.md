@@ -7,6 +7,7 @@
     - [Overview](#overview)
     - [Why?](#why)
     - [Features](#features)
+    - [Install/Use](#installuse)
     - [Configurations](#configurations)
     - [MJS](#mjs)
         - [Examples](#examples)
@@ -43,6 +44,12 @@ _**This library is my solution to this problem**_, not only solving it, but also
 - Reboot device on successful connection test `provision.wifi.success.reboot` when `true` (default: `false`)
 - Reboot device on failed connection test `provision.wifi.fail.reboot` when `true` (default: `false`)
 - Clear test STA values on success test `provision.wifi.success.clear`, or fail `provision.wifi.fail.clear`, when `true` (default: `false`)
+
+## Install/Use
+To use this library in your Mongoose OS project, just add it under the `libs` in your `mos.yml` file:
+```yml
+  - origin: https://github.com/tripflex/mos-lib-provision-wifi
+```
 
 ## Configurations
 This library adds a `provision.wifi` object to the mos configuration, with the following settings:
