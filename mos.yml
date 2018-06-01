@@ -27,10 +27,11 @@ config_schema:
 
   # WiFi STA Test Configuration
   - ["provision.wifi.sta", "o", {title: "WiFi Provision Test Station"}]
+  - ["provision.wifi.sta.enable", "b", true, {title: "INTERNAL USE ONLY - Connect to existing WiFi"}] # This MUST always be set to TRUE otherwise call to core wifi lib to validate STA config will fail
     # Most setups will only need to set SSID and Password
     # You can use mgos_provision_wifi_test_ssid_pass() or mjs ProvisionWiFi.Test.SSIDandPass( "ssid", "password", callback_fn, userdata )
   - ["provision.wifi.sta.ssid", "s", {title: "SSID"}]
-  - ["provision.wifi.sta.pass", "s", "", {title: "Password", type: "password"}]
+  - ["provision.wifi.sta.pass", "s", {title: "Password", type: "password"}]
     # The rest of these settings should only be used by advanced users who know what they are doing
   - ["provision.wifi.sta.user", "s", {title: "Username for WPA-PEAP mode"}]
   - ["provision.wifi.sta.anon_identity", "s", {title: "Anonymous identity for WPA mode"}]
@@ -63,7 +64,6 @@ config_schema:
   - ["provision.wifi.results", "o", {title: "WiFi Provision Test Results"}]
   - ["provision.wifi.results.success", "b", false, {title: "INTERNAL USE ONLY - Whether or not the last test was succesful or not"}] # You should NEVER override this value
   - ["provision.wifi.results.ssid", "s", "", {title: "INTERNAL USE ONLY - SSID used for last test results"}] # You should NEVER override this value
-  - ["provision.wifi.sta.enable", "b", true, {title: "INTERNAL USE ONLY - Connect to existing WiFi"}] # This MUST always be set to TRUE otherwise call to core wifi lib to validate STA config will fail
   # !! END INTERNAL USE ONLY SETTINGS !!
 
 
