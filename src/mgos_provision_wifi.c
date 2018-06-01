@@ -109,7 +109,10 @@ static void mgos_provision_wifi_connection_failed(void){
 
   // We only want to attempt to reconnect if reboot on fail is false
   if( b_sta_was_connected && mgos_sys_config_get_provision_wifi_reconnect() ){
+    mgos_wifi_disconnect();
     LOG(LL_INFO, ("%s", "Provision WiFi attempting previous STA connection!" ) );
+
+    // AP will go down for a few seconds, while reinit wifi, but should be transparent to user
     mgos_wifi_setup((struct mgos_config_wifi *) mgos_sys_config_get_wifi());
   }
 
@@ -180,7 +183,7 @@ static void mgos_provision_wifi_net_cb(int ev, void *evd, void *arg) {
         LOG(LL_ERROR, ("Provision WiFi STA FAILED after %d total attempts (Max of %d)", s_provision_wifi_con_attempts, i_provision_wifi_total_attempts ));
         mgos_provision_wifi_connection_failed();
       } else {
-        // Reattempt connection as long as we haven't 
+        // Reattempt connection as long as we haven't exceeded total attempts
         mgos_provision_wifi_connect_sta();
       }
 
@@ -216,7 +219,7 @@ static void mgos_provision_wifi_net_cb(int ev, void *evd, void *arg) {
       }
   }
 
-  LOG(LL_INFO, ("Provision WiFi STA NET Callback SSID: %s", connected_ssid ? connected_ssid : "UNKNOWN"));
+  // LOG(LL_INFO, ("Provision WiFi STA NET Callback SSID: %s", connected_ssid ? connected_ssid : "UNKNOWN"));
 
   if( connected_ssid != NULL ){
     free(connected_ssid);
@@ -345,6 +348,9 @@ bool mgos_provision_wifi_setup_sta(const struct mgos_config_provision_wifi_sta *
     return false;
   }
   wifi_lock();
+  /* Note: even if the config didn't change, disconnect and
+  * reconnect to re-init WiFi. */
+  mgos_wifi_disconnect();
   bool ret = mgos_wifi_dev_sta_setup( (struct mgos_config_wifi_sta *) cfg);
   if (ret) {
     LOG(LL_INFO, ("Provision WiFi Setup STA: Connecting to %s", cfg->ssid));
@@ -359,7 +365,8 @@ bool mgos_provision_wifi_disconnect_sta(void) {
   LOG(LL_INFO, ( "Provision WiFi DISCONNECT" ) );
   wifi_lock();
   s_sta_should_reconnect = false;
-  bool ret = mgos_wifi_dev_sta_disconnect();
+  // bool ret = mgos_wifi_dev_sta_disconnect();
+  bool ret = mgos_wifi_disconnect(); // Use wifi lib to make sure it doesn't attempt to reconnect
   wifi_unlock();
   return ret;
 }
@@ -379,7 +386,7 @@ bool mgos_provision_wifi_connect_sta(void) {
     
     int connect_timeout = mgos_sys_config_get_provision_wifi_timeout();
 
-    // Add timer if not already set
+    // Add timer if not already set (but should be already set by mgos_provision_wifi_run_test() )
     if (connect_timeout > 0 && s_provision_wifi_timer_id == MGOS_INVALID_TIMER_ID) {
       s_provision_wifi_timer_id = mgos_set_timer(connect_timeout * 1000, 0, mgos_provision_wifi_sta_connect_timeout_timer_cb, NULL);
     }
@@ -458,13 +465,18 @@ void mgos_provision_wifi_run_test(void){
   
   // Disconnect before attempting any new connections
   // mgos_wifi_disconnect();
+  mgos_provision_wifi_disconnect_connected_sta();
+  result = mgos_provision_wifi_setup_sta( cfg );
+  
+  // cfg->enable = false; // Set to false to FORCE wifi lib not to set/create timer (since we use our own)
+  // result = mgos_wifi_setup_sta( (struct mgos_config_wifi_sta *) cfg );
 
-  // If existing station is already connected, use wifi lib setup sta function ()
-  if( mgos_provision_wifi_disconnect_connected_sta() ){
-    result = mgos_wifi_setup_sta( (struct mgos_config_wifi_sta *) cfg );
-  } else {
-    result = mgos_provision_wifi_setup_sta( cfg );
-  }
+  // // If existing station is already connected, use wifi lib setup sta func to make sure we don't try to setup sta when lock is held by wifi lib
+  // if( mgos_provision_wifi_disconnect_connected_sta() ){
+  //   result = mgos_wifi_setup_sta( (struct mgos_config_wifi_sta *) cfg );
+  // } else {
+  //   result = mgos_provision_wifi_setup_sta( cfg );
+  // }
 
   if (result) {
 
@@ -489,12 +501,16 @@ void mgos_provision_wifi_run_test(void){
 }
 
 void mgos_provision_wifi_test(mgos_wifi_provision_cb_t cb, void *userdata) {
-  s_provision_wifi_test_cb = cb;
-  s_provision_wifi_test_cb_userdata = userdata;
 
   if (!b_provision_wifi_testing) {
+    // Only set callback when test isn't already running
+    s_provision_wifi_test_cb = cb;
+    s_provision_wifi_test_cb_userdata = userdata;
+
     LOG(LL_INFO, ("%s", "Provision WiFi Running Test with Callback Set" ) );
     mgos_provision_wifi_run_test();
+  } else {
+    LOG(LL_ERROR, ("%s", "Provision WiFi Running Test with Callback Error - Test already running" ) );
   }
 }
 
@@ -504,8 +520,12 @@ void mgos_provision_wifi_test_ssid_pass(const char *ssid, const char *pass, mgos
     return;
   }
 
-  //TODO: set ssid and password in config
-  LOG(LL_INFO, ("%s", "Provision WiFi Running Test with Callback after setting SSID and PASS" ) );
+  mgos_sys_config_set_provision_wifi_sta_ssid( ssid );
+  mgos_sys_config_set_provision_wifi_sta_pass( pass );
+
+  save_cfg(&mgos_sys_config, NULL);
+
+  LOG(LL_INFO, ("Provision WiFi Running Test with Callback after setting SSID %s and PASS %s", ssid, pass ) );
   mgos_provision_wifi_test( cb, userdata );
 }
 

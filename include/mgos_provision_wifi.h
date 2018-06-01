@@ -85,11 +85,9 @@ void mgos_provision_wifi_run_test(void);
  */
 void mgos_provision_wifi_test(mgos_wifi_provision_cb_t cb, void *userdata);
 
-/*
- * TODO:
- * 
- * Same as mgos_provision_wifi_test() except this function you must pass the
- * SSID and Password to test with
+/* 
+ * Same as mgos_provision_wifi_test() (which is for using with callback) except this function you must pass the
+ * SSID and Password to test with.
  * 
  */
 void mgos_provision_wifi_test_ssid_pass(const char *ssid, const char *pass, mgos_wifi_provision_cb_t cb, void *userdata);
