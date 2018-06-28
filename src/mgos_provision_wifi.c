@@ -513,7 +513,7 @@ void mgos_provision_wifi_test(mgos_wifi_provision_cb_t cb, void *userdata) {
   }
 }
 
-void mgos_provision_wifi_test_ssid_pass(const char *ssid, const char *pass, mgos_wifi_provision_cb_t cb, void *userdata){
+void mgos_provision_wifi_test_ssid_pass(const char *ssid, const char *pass, mgos_wifi_provision_cb_t cb, bool disable_ap, void *userdata){
   if( ! ssid ){
     LOG(LL_ERROR, ("%s", "Provision WiFi Test SSID PASS, SSID is missing" ) );
     return;
@@ -521,6 +521,10 @@ void mgos_provision_wifi_test_ssid_pass(const char *ssid, const char *pass, mgos
 
   mgos_sys_config_set_provision_wifi_sta_ssid( ssid );
   mgos_sys_config_set_provision_wifi_sta_pass( pass );
+
+  if( disable_ap ){
+    mgos_sys_config_set_wifi_ap_enable( false );
+  }
 
   save_cfg(&mgos_sys_config, NULL);
 

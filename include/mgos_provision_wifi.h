@@ -89,8 +89,9 @@ void mgos_provision_wifi_test(mgos_wifi_provision_cb_t cb, void *userdata);
  * Same as mgos_provision_wifi_test() (which is for using with callback) except this function you must pass the
  * SSID and Password to test with.
  * 
+ * Pass TRUE to disable_ap to disable wifi.ap after succesful testing, FALSE to keep it enabled
  */
-void mgos_provision_wifi_test_ssid_pass(const char *ssid, const char *pass, mgos_wifi_provision_cb_t cb, void *userdata);
+void mgos_provision_wifi_test_ssid_pass(const char *ssid, const char *pass, mgos_wifi_provision_cb_t cb, bool disable_ap, void *userdata);
 
 /*
  * Copy test WiFi Provision values to wifi.sta

@@ -76,7 +76,7 @@ ProvisionWiFi.Test.run( callback_fn, userdata );
 ```
 - Run WiFi test based on values previously set in `provision.wifi.sta`, calling `callback_fn` after completion
 ```js
-ProvisionWiFi.Test.SSIDandPass( ssid, pass, callback_fn, userdata );
+ProvisionWiFi.Test.SSIDandPass( ssid, pass, callback_fn, disable_ap, userdata );
 ```
 - Set `provision.wifi.sta.ssid` and `provision.wifi.sta.pass`, calling `callback_fn` after completion
 
@@ -125,7 +125,7 @@ If you use a callback function (`ProvisionWiFi.Test.run` or `ProvisionWiFi.Test.
 ### Examples
 
 ```js
-ProvisionWiFi.Test.SSIDandPass( "TestSSID", "TestPassword", function( success, ssid, userdata ){
+ProvisionWiFi.Test.SSIDandPass( "TestSSID", "TestPassword", function( success, ssid, disable_ap, userdata ){
 
     if( success ){
         // Hey look those credentials worked!
@@ -133,7 +133,7 @@ ProvisionWiFi.Test.SSIDandPass( "TestSSID", "TestPassword", function( success, s
         // Oh no, probably wrong/bad credentials!
     }
 
-}, null );
+}, true, null );
 ```
 
 ```js

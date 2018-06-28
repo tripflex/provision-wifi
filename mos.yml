@@ -27,7 +27,10 @@ config_schema:
 
   # WiFi STA Test Configuration
   - ["provision.wifi.sta", "o", {title: "WiFi Provision Test Station"}]
-  - ["provision.wifi.sta.enable", "b", true, {title: "INTERNAL USE ONLY - Connect to existing WiFi"}] # This MUST always be set to TRUE otherwise call to core wifi lib to validate STA config will fail
+  
+    # PROVISION.WIFI.STA.ENABLE INTERNAL ONLY!! DO NOT MODIFY THIS VALUE!!
+  - ["provision.wifi.sta.enable", "b", true, {title: "INTERNAL USE ONLY - Connect to existing WiFi"}]
+
     # Most setups will only need to set SSID and Password
     # You can use mgos_provision_wifi_test_ssid_pass() or mjs ProvisionWiFi.Test.SSIDandPass( "ssid", "password", callback_fn, userdata )
   - ["provision.wifi.sta.ssid", "s", {title: "SSID"}]

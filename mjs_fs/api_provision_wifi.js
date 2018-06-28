@@ -17,7 +17,7 @@ let ProvisionWiFi = {
     isRunning: ffi( 'bool mgos_provision_wifi_is_test_running(void)'),
     Test: {
         run: ffi('void mgos_provision_wifi_test(void(*)(int,char*,userdata),userdata)'),
-        SSIDandPass: ffi('void mgos_provision_wifi_test_ssid_pass(char*,char*,void(*)(int,char*,userdata),userdata)')
+        SSIDandPass: ffi('void mgos_provision_wifi_test_ssid_pass(char*,char*,void(*)(int,char*,userdata),int,userdata)')
     },
     run: ffi('void mgos_provision_wifi_run_test(void)')
 };
