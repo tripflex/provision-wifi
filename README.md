@@ -41,6 +41,7 @@ _**This library is my solution to this problem**_, not only solving it, but also
 - Reconnects to existing station (if one was connected) after testing, when `provision.wifi.reconnect` is `true` (default: `true`)
 - Test STA values are stored separate from WiFi Library STA values (in `provision.wifi.sta` - matches wifi lib structure)
 - Automatically copy test STA values to `wifi.sta` after succesful connection test, when `provision.wifi.success.copy` is `true` (default: `true`)
+- Disable AP on successful connection test `provision.wifi.success.disable_ap` when `true` (default: `false`)
 - Reboot device on successful connection test `provision.wifi.success.reboot` when `true` (default: `false`)
 - Reboot device on failed connection test `provision.wifi.fail.reboot` when `true` (default: `false`)
 - Clear test STA values on success test `provision.wifi.success.clear`, or fail `provision.wifi.fail.clear`, when `true` (default: `false`)

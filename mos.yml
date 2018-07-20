@@ -50,6 +50,7 @@ config_schema:
   - [ "provision.wifi.success.copy", "b", true, {title: "Save WiFi STA configuration to device (wifi.sta) after successful connection"} ]
   - [ "provision.wifi.success.enable", "b", true, {title: "Enable WiFi STA after copying values (only if copy is enabled)"} ]
   - [ "provision.wifi.success.reboot", "b", false, {title: "Reboot device after successful WiFi connection attempt, and copying sta values to wifi statation (if enabled)" } ]
+  - [ "provision.wifi.success.disable_ap", "b", false, {title: "Disable WiFi AP after successful connection attempt (sets wifi.ap.enable to false)"} ]
   - [ "provision.wifi.success.disconnect", "b", false, {title: "Disconnect from STA after succesful connection attempt" } ]
   # TODO:
   # - [ "provision.wifi.success.index", "i", 0, {title: "STA index to copy values to.  Default is 0 which is the first STA in configuration, only change this if you know what you are doing."} ]

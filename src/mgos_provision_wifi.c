@@ -140,7 +140,12 @@ static void mgos_provision_wifi_connection_success(void){
 
   mgos_provision_wifi_set_last_test( true ); // Must be ran before clearing values (to set SSID)
 
-  // Disable testing credentials on boot
+  // If config set to disable AP on success, set to false before disabling boot test (which calls save_cfg already, to prevent calling multiple saves)
+  if( mgos_sys_config_get_provision_wifi_success_disable_ap() ){
+    mgos_sys_config_set_wifi_ap_enable( false );
+  }
+
+  // Disable testing credentials on boot (calls save_cfg) -- must be after setting AP disabled
   mgos_provision_wifi_disable_boot_test();
 
   if( mgos_sys_config_get_provision_wifi_success_clear() ){
