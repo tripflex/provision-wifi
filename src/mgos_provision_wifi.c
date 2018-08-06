@@ -75,10 +75,8 @@ static void mgos_provision_wifi_set_last_test(bool last_test_results){
   if( ! save_cfg(&mgos_sys_config, &err) ){
     LOG(LL_ERROR, ("Provision WiFi Set Last Test Results, Save Config Error: %s", err) );
     free(err);
-    return false;
+    return;
   }
-
-  return true;
 }
 
 static void mgos_provision_wifi_clear_values(void){
