@@ -1,5 +1,11 @@
 # Mongoose OS Wifi Provision Library
 
+This library is now **DEPRECATED** in favor of the Wifi Captive Portal library I created for Mongoose OS.  I will still accept PR and fix any bugs that are reported, but as this was my first ever lib for Mongoose OS, I now realize there was a lot of things probably not necessary in this lib.  It should still work fine, and could be a great resource for those learning mos, but I will personally no longer be using this lib.
+
+I strongly recommend taking a look at the WiFi Captive Portal library instead:
+
+https://github.com/tripflex/wifi-captive-portal
+
 ## Table of Contents
 - [Mongoose OS Wifi Provision Library](#mongoose-os-wifi-provision-library)
     - [Table of Contents](#table-of-contents)
